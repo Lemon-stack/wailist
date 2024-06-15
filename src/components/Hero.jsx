@@ -1,10 +1,19 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/useAuth"
+import { useTransition } from "react";
 export default function Hero() {
-  const navigate = useNavigate()
+   const navigate = useNavigate()
   const {currentUser} = useAuth()
-  function checkUser(){
-    return currentUser ? navigate('/dashboard') : navigate('/login')
+  const [isPending, startTransition] = useTransition();
+
+  function checkUser() {
+    startTransition(() => {
+      if (currentUser) {
+        navigate('/dashboard');
+      } else {
+        navigate('/login');
+      }
+    });
   }
   return (
     // streamline your product's launch waitlist
@@ -20,6 +29,7 @@ export default function Hero() {
   {/* <input type="text" className="py-3 px-4 block w-full border border-slate-50 text-slate-50 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none bg-transparent" placeholder=""/> */}
      <button
       onClick={checkUser}
+      disabled={isPending}
       className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center">
         Start creating
         <svg className="w-5 h-5 text-blk ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
