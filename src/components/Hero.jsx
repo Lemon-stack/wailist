@@ -4,7 +4,7 @@ export default function Hero() {
   const navigate = useNavigate()
   const {currentUser} = useAuth()
   function checkUser(){
-    return currentUser ? navigate('login') : navigate('/home')
+    return currentUser ? navigate('/dashboard') : navigate('/login')
   }
   return (
     // streamline your product's launch waitlist
