@@ -28,7 +28,7 @@ export default function Hero() {
           </span>
         </h1>
       
-      <p className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Enter the name of your product below to create a new waitlist.</p>
+      <p className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Streamline the launch process 🚀</p>
       </div>
 
   <div className="max-w-xl flex items-center mt-4">
