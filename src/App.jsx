@@ -13,6 +13,7 @@ import {
 } from './components';
 import PrivateRoute from './context/PrivateRoute';
 import Spinner from './components/sub-components/Spinner';
+
 function App() {
 
   return (

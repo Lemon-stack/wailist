@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { doc, setDoc, collection } from "firebase/firestore";
 import { db } from '../../client/client'; 
 import Spinner from "./Spinner";
+import { motion } from "framer-motion";
 
 export default function Topnav() {
   const { currentUser } = useAuth();
@@ -12,6 +13,9 @@ export default function Topnav() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRotated, setIsRotated] = useState(false);
+
+ 
 
   useEffect(() => {
     if (currentUser) {
@@ -56,8 +60,14 @@ export default function Topnav() {
   }, [addProduct, name, description]);
 
   const handleToggleModal = useCallback(() => {
+    handleRotate()
     setIsModalOpen((prev) => !prev);
   }, []);
+
+  // rotate the create boutton
+  const handleRotate = () => {
+    setIsRotated(!isRotated);
+  };
 
   if (loading) {
     return <Spinner/>
@@ -83,7 +93,7 @@ export default function Topnav() {
         </div>
 
         <div
-          className="relative bg-brown p-2 rounded-full flex justify-center items-center cursor-pointer"
+         className={`relative bg-brown p-2 z-10 rounded-full flex justify-center items-center cursor-pointer rotating-element ${isRotated ? 'rotated' : ''}`}
           onClick={handleToggleModal}
         >
           <p className="sr-only">create list</p>
@@ -94,8 +104,17 @@ export default function Topnav() {
       </div>
 
       {isModalOpen && (
-        <div className="absolute right-[17%] w-[65%] text-blk bg-slate-50 rounded-lg px-6 py-4">
+        <>
+          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[2px] bg-opacity-10"></p>
+
+        <motion.div
+        initial={{opacity:0.5, y:-100}}
+        
+        animate={{opacity:1, y:0}}
+        transition={{duration:1, ease:"easeOut"}}
+         className="absolute right-[17%] w-[65%] text-blk bg-slate-50 rounded-lg px-6 py-4 backdrop-blur-2xl backdrop-opacity-100">
           <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">New List</h2>
+         
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="productName" className="block text-md font-medium mb-2 text-start">Product Name:</label>
@@ -122,7 +141,8 @@ export default function Topnav() {
             </div>
             <button type="submit" className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark">Create Product</button>
           </form>
-        </div>
+        </motion.div>
+      </>
       )}
     </div>
   );

@@ -12,3 +12,13 @@ body {
     width: 100vw;
     height: 100vh;
   }
+
+  .rotating-element {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .rotating-element.rotated {
+    transform: rotate(45deg); /* You can change this value to the desired rotation angle */
+  }
+  

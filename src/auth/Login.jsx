@@ -45,7 +45,7 @@ export default function Login() {
     <div className="flex flex-col justify-center items-center">
     {error && <div className="absolute top-0 right-0 bg-red-400 text-white px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
     <div className="relative lg:p-4 w-full max-w-md h-full md:h-auto">
-      <div className="relative bg-white rounded-lg shadow -mx-8 md:mx-0">
+      <div className="relative bg-white rounded-lg shadow -mx-4 md:mx-0">
         <div className="p-5">
           <p className="mb-4 text-sm font-normal text-gray-800" />
           <div className="text-center">
@@ -110,7 +110,7 @@ export default function Login() {
               type="password"
               autoComplete="current-password"
               required=""
-              className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+              className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
               placeholder="Password"
               defaultValue=""
               ref={passwordRef}
@@ -125,7 +125,7 @@ export default function Login() {
             </p>
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
+              className="inline-flex w-full items-center justify-center rounded-lg bg-brown p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-brown focus:ring-offset-1 disabled:bg-gray-400"
             >
               Continue
             </button>

@@ -91,7 +91,7 @@ export default function Signup() {
               type="email"
               autoComplete="email"
               required=""
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+              className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
               placeholder="Email Address"
               defaultValue=""
               ref={emailRef}
@@ -104,7 +104,7 @@ export default function Signup() {
               type="password"
               autoComplete="current-password"
               required=""
-              className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+              className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
               placeholder="Password"
               defaultValue=""
               ref={passwordRef}
@@ -112,7 +112,7 @@ export default function Signup() {
           
             <button
               type="submit"
-              className="inline-flex w-full items-center mt-4 justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
+              className="inline-flex w-full items-center mt-4 justify-center rounded-lg bg-brown p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
             >
               Continue
             </button>

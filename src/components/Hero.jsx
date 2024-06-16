@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion";
 import { useAuth } from "../context/useAuth"
 import { useTransition } from "react";
 export default function Hero() {
@@ -17,33 +18,39 @@ export default function Hero() {
   }
   return (
     // streamline your product's launch waitlist
-    <div className="w-full h-full flex flex-col m-0 justify-center pt-[20%] md:px-6 lg:pt-[12%]">
+    <motion.div className="w-full h-full flex flex-col m-0 justify-center pt-[20%] md:px-6 lg:pt-[12%]">
       <div className="flex flex-col items-start justify-center text-slate-50">
-        <h1 className="flex flex-col text-6xl md:text-7xl font-bold text-start">
+        <motion.h1
+        initial={{opacity:0, y:-50}}
+        animate={{opacity:1, y:0}}
+        transition={{duration:1, ease:"easeOut", delay:0.1}}
+         className="flex flex-col text-6xl md:text-7xl font-bold text-start">
           <span>Create a waitlist</span>
 
           <span className="flex flex-col sm:flex-row text-start items-start">
           <span>for your</span>
           <span className="rotate-2 mt-4 bg-brown ml-2 px-4 py-1 text-blk">Product</span>
           </span>
-        </h1>
+        </motion.h1>
       
       <p className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Streamline the launch process 🚀</p>
       </div>
 
   <div className="max-w-xl flex items-center mt-4">
   {/* <input type="text" className="py-3 px-4 block w-full border border-slate-50 text-slate-50 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none bg-transparent" placeholder=""/> */}
-     <button
+     <motion.button
+     whileTap={{scale:0.9}}
+     whileHover={{scale:1.1, backgroundColor:"#fff", color:"#da7e37"}}
       onClick={checkUser}
       disabled={isPending}
-      className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center">
+      className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center group">
         Start creating
-        <svg className="w-5 h-5 text-blk ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-blk ml-2 group" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m9 5 7 7-7 7"/>
         </svg>
 
-      </button>
+      </motion.button>
       </div>
-    </div>
+    </motion.div>
   )
 }
