@@ -44,8 +44,8 @@ export default function Login() {
   return (
     <div className="flex flex-col justify-center items-center">
     {error && <div className="absolute top-0 right-0 bg-red-400 text-white px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
-    <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-      <div className="relative bg-white rounded-lg shadow">
+    <div className="relative lg:p-4 w-full max-w-md h-full md:h-auto">
+      <div className="relative bg-white rounded-lg shadow -mx-8 md:mx-0">
         <div className="p-5">
           <p className="mb-4 text-sm font-normal text-gray-800" />
           <div className="text-center">

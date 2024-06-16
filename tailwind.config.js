@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        'brown': '#eacdc2',
+        'brown': '#da7e37',
         'blk': '#0a0908',
       },
     },

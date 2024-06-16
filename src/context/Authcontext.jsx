@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import Spinner from '../components/sub-components/Spinner';
 import { auth, provider } from '../client/client';
 import { createUserWithEmailAndPassword, 
          signInWithEmailAndPassword, 
@@ -87,7 +88,7 @@ export default function AuthProvider({ children }) {
   };
 
   if(loading){
-    return <div>Loading......</div>
+    return <Suspense fallback={<Spinner/>}/>
   
   }
 

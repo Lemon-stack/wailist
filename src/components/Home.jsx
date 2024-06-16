@@ -1,4 +1,5 @@
- import Topnav from "./sub-components/Topnav"
+ import { Outlet } from "react-router-dom"
+import Topnav from "./sub-components/Topnav"
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
     onClick={handleLogout}
     className="bg-black text-white rounded-md px-8 py-2">Logout</button> */}
   <Topnav/>
+  <Outlet/>
     </>
 
   )

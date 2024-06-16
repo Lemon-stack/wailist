@@ -1,34 +1,40 @@
 import { useAuth } from "../../context/useAuth";
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { doc, setDoc, collection } from "firebase/firestore";
-import { db } from '../../client/client'; // Make sure to import your Firestore instance
+import { db } from '../../client/client'; 
+import Spinner from "./Spinner";
 
 export default function Topnav() {
   const { currentUser } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const uid = currentUser ? currentUser.uid : null;
+  const [uid, setUid] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Function to add a new product
-  const addProduct = async (productName, productDescription) => {
+  useEffect(() => {
+    if (currentUser) {
+      setUid(currentUser.uid);
+      setLoading(false);
+    } else {
+      setError("User is not authenticated.");
+      setLoading(false);
+    }
+  }, [currentUser]);
+
+  const addProduct = useCallback(async (productName, productDescription) => {
     try {
       if (!uid) {
         throw new Error('User is not authenticated.');
       }
 
-      // Reference to the user's document in Firestore
       const userRef = doc(db, 'users', uid);
-
-      // Ensure the user's collection exists, and create it if not
       await setDoc(userRef, { /* any initial data if needed */ }, { merge: true });
 
-      // Reference to the "products" sub-collection under the user's UID
       const productsRef = collection(userRef, "products");
-
-      // Generate a unique ID for the new product document
       const newProductRef = doc(productsRef); // This creates a new auto-generated document ID
 
-      // Set the data for the new product document
       await setDoc(newProductRef, {
         name: productName,
         description: productDescription,
@@ -39,19 +45,27 @@ export default function Topnav() {
     } catch (error) {
       console.error("Error adding product: ", error);
     }
-  };
+  }, [uid]);
 
-  // Handle form submission
-  const handleSubmit = async (event) => {
+  const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
-
-    // Call addProduct with form input values
     await addProduct(name, description);
-
-    // Clear form fields after submission
     setName('');
     setDescription('');
-  };
+    setIsModalOpen(false);
+  }, [addProduct, name, description]);
+
+  const handleToggleModal = useCallback(() => {
+    setIsModalOpen((prev) => !prev);
+  }, []);
+
+  if (loading) {
+    return <Spinner/>
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="text-slate-50 w-full h-full">
@@ -68,42 +82,48 @@ export default function Topnav() {
           </div>
         </div>
 
-        {/* Button or icon for modal trigger */}
-        <div className="relative bg-brown p-2 rounded-full flex justify-center items-center cursor-pointer">
+        <div
+          className="relative bg-brown p-2 rounded-full flex justify-center items-center cursor-pointer"
+          onClick={handleToggleModal}
+        >
+          <p className="sr-only">create list</p>
           <svg className="w-7 h-6 text-blk" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/>
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
           </svg>
         </div>
       </div>
 
-      {/* Modal for creating document */}
-      <div className="absolute right-64 text-blk">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="productName" className="block">Product Name:</label>
-            <input
-              type="text"
-              id="productName"
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="productDescription" className="block">Description:</label>
-            <input
-              type="text"
-              id="productDescription"
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark">Create Product</button>
-        </form>
-      </div>
+      {isModalOpen && (
+        <div className="absolute right-[17%] w-[65%] text-blk bg-slate-50 rounded-lg px-6 py-4">
+          <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">New List</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="productName" className="block text-md font-medium mb-2 text-start">Product Name:</label>
+              <input
+                type="text"
+                id="productName"
+                className="block w-full rounded-lg border border-gray-300 px-3 py-1 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="productDescription" className="block text-md font-medium mb-2 text-start">Description:</label>
+              <textarea
+                name="ProductDescription"
+                rows={6}
+                id="productDescription"
+                className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark">Create Product</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

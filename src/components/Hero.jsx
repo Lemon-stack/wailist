@@ -17,12 +17,18 @@ export default function Hero() {
   }
   return (
     // streamline your product's launch waitlist
-    <div className="w-full h-full flex flex-col m-0 justify-center pt-[20%] px-6 lg:pt-[12%]">
-
+    <div className="w-full h-full flex flex-col m-0 justify-center pt-[20%] md:px-6 lg:pt-[12%]">
       <div className="flex flex-col items-start justify-center text-slate-50">
-      <h2 className="text-6xl lg:text-7xl font-bold">Create a waitlist</h2>
-      <h2 className="text-6xl flex justify-center items-center lg:text-7xl font-bold">for your<span className="flex items-center justify-center ml-3 bg-brown p-2 rotate-2 text-blk">product.</span></h2>
-      <p className="text-slate-50 text-start w-2/3 lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Enter the name of your product below to create a new waitlist.</p>
+        <h1 className="flex flex-col text-6xl md:text-7xl font-bold text-start">
+          <span>Create a waitlist</span>
+
+          <span className="flex flex-col sm:flex-row text-start items-start">
+          <span>for your</span>
+          <span className="rotate-2 mt-4 bg-brown ml-2 px-4 py-1 text-blk">Product</span>
+          </span>
+        </h1>
+      
+      <p className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Enter the name of your product below to create a new waitlist.</p>
       </div>
 
   <div className="max-w-xl flex items-center mt-4">
