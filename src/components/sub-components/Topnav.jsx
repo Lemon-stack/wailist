@@ -60,14 +60,10 @@ export default function Topnav() {
   }, [addProduct, name, description]);
 
   const handleToggleModal = useCallback(() => {
-    handleRotate()
+    setIsRotated((prev) => !prev);
     setIsModalOpen((prev) => !prev);
   }, []);
-
   // rotate the create boutton
-  const handleRotate = () => {
-    setIsRotated(!isRotated);
-  };
 
   if (loading) {
     return <Spinner/>
@@ -79,8 +75,8 @@ export default function Topnav() {
 
   return (
     <div className="text-slate-50 w-full h-full">
-      <div className="flex-shrink-0 group flex justify-between">
-        <div className="flex items-center">
+      <div className="group flex justify-between">
+        <div className="flex items-center md:hidden">
           <img
             className="inline-block flex-shrink-0 size-10 rounded-full"
             src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
@@ -93,11 +89,11 @@ export default function Topnav() {
         </div>
 
         <div
-         className={`relative bg-brown p-2 z-10 rounded-full flex justify-center items-center cursor-pointer rotating-element ${isRotated ? 'rotated' : ''}`}
+         className={`relative bg-brown p-2 z-30 rounded-full flex justify-center md:absolute md:top-8 md:right-9 items-center cursor-pointer rotating-element ${isRotated ? 'rotated' : ''}`}
           onClick={handleToggleModal}
         >
           <p className="sr-only">create list</p>
-          <svg className="w-7 h-6 text-blk" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <svg className="w-7 md:w-6 h-6 text-blk" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
           </svg>
         </div>
@@ -105,14 +101,14 @@ export default function Topnav() {
 
       {isModalOpen && (
         <>
-          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[2px] bg-opacity-10"></p>
+          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
 
         <motion.div
-        initial={{opacity:0.5, y:-100}}
+        initial={{opacity:0.5, y:-50}}
         
         animate={{opacity:1, y:0}}
         transition={{duration:1, ease:"easeOut"}}
-         className="absolute right-[17%] w-[65%] text-blk bg-slate-50 rounded-lg px-6 py-4 backdrop-blur-2xl backdrop-opacity-100">
+         className="absolute right-[17%] w-[65%] md:w-[45%] text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg">
           <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">New List</h2>
          
           <form onSubmit={handleSubmit}>

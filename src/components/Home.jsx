@@ -1,5 +1,6 @@
  import { Outlet } from "react-router-dom"
 import Topnav from "./sub-components/Topnav"
+import Sidenav from "./sub-components/Sidenav"
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 export default function Home() {
@@ -26,8 +27,23 @@ export default function Home() {
     <button
     onClick={handleLogout}
     className="bg-black text-white rounded-md px-8 py-2">Logout</button> */}
+  <div className="h-full flex flex-col">
+
+  <div className="w-full flex justify-end">
+  <div className="md:w-[70%] w-full">
   <Topnav/>
-  <Outlet/>
+  </div>
+  </div>
+
+  <div className="flex">
+  <div className="md:w-[30%] hidden md:block">
+        <Sidenav />
+      </div>
+      <div className="w-full md:w-[70%]">
+        <Outlet />
+      </div>
+  </div>
+  </div>
     </>
 
   )

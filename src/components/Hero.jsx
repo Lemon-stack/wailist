@@ -23,17 +23,25 @@ export default function Hero() {
         <motion.h1
         initial={{opacity:0, y:-50}}
         animate={{opacity:1, y:0}}
-        transition={{duration:1, ease:"easeOut", delay:0.1}}
+        transition={{duration:0.5, ease:"easeOut", delay:0.1}}
          className="flex flex-col text-6xl md:text-7xl font-bold text-start">
           <span>Create a waitlist</span>
 
           <span className="flex flex-col sm:flex-row text-start items-start">
           <span>for your</span>
-          <span className="rotate-2 mt-4 bg-brown ml-2 px-4 py-1 text-blk">Product</span>
+          <motion.span
+          initial={{rotateZ:0}}
+          animate={{rotateZ:4}}
+          transition={{ease:"easeOut", delay:1.1}}
+           className="rotate-2 mt-4 bg-brown ml-2 px-4 py-1 text-blk">Product</motion.span>
           </span>
         </motion.h1>
       
-      <p className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Streamline the launch process 🚀</p>
+      <motion.p 
+      initial={{opacity:0, y:30}}
+      animate={{opacity:1, y:0}}
+      transition={{duration:0.5, ease:"easeOut", delay:0.3}}
+      className="text-slate-50 text-start w-3/4 flex lg:w-1/2 mt-4 text-lg lg:text-xl">Start managing your product demand more effectively. Streamline the launch process 🚀</motion.p>
       </div>
 
   <div className="max-w-xl flex items-center mt-4">
@@ -43,9 +51,9 @@ export default function Hero() {
      whileHover={{scale:1.1, backgroundColor:"#fff", color:"#da7e37"}}
       onClick={checkUser}
       disabled={isPending}
-      className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center group">
+      className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center hover:border-2 hover:border-brown group">
         Start creating
-        <svg className="w-5 h-5 text-blk ml-2 group" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-blk ml-2 group-hover:text-brown" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m9 5 7 7-7 7"/>
         </svg>
 
