@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preline/collapse": "^2.3.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.10",
     "preline": "^2.3.0",

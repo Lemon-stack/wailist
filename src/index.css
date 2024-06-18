@@ -21,4 +21,10 @@ body {
   .rotating-element.rotated {
     transform: rotate(45deg); /* You can change this value to the desired rotation angle */
   }
-  
+
+.single-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

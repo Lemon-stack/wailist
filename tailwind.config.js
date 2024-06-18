@@ -3,7 +3,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    './node_modules/preline/dist/preline.js'
+    './node_modules/preline/preline.js'
   ],
   theme: {
     extend: {
@@ -15,6 +15,7 @@ export default {
   },
   plugins: [
     require('preline/plugin'),
+    require('@tailwindcss/line-clamp'),
   ],
 }
 

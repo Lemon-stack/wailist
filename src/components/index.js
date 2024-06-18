@@ -6,6 +6,7 @@ const Hero = lazy(() => import('./Hero'));
 const PrivateRoutesContainer = lazy(() => import('./PrivateRoutesContainer'));
 const Notfound = lazy(() => import('./Notfound'));
 const Lists = lazy(() => import('./Lists'));
+const ListPrev = lazy(() => import('./sub-components/ListPrev'));
 
 export {
   Home,
@@ -14,4 +15,5 @@ export {
   PrivateRoutesContainer,
   Notfound,
   Lists,
+  ListPrev
 };

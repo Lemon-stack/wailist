@@ -6,13 +6,14 @@ import Spinner from "./Spinner";
 import { motion } from "framer-motion";
 
 export default function Topnav() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [uid, setUid] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isRotated, setIsRotated] = useState(false);
 
  
@@ -72,6 +73,9 @@ export default function Topnav() {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  function signOut(){
+    logout()
+  }
 
   return (
     <div className="text-slate-50 w-full h-full">
@@ -88,23 +92,54 @@ export default function Topnav() {
           </div>
         </div>
 
+        <div className="flex justify-between items-center">
+        <div className="mr-4 md:hidden">
+         <div className="absolute right-[5.4rem] top-9 z-30 ">
+          <svg
+          onClick={()=>setIsDropdownOpen((prev)=> !prev)}
+          className="w-9 h-9 text-brown" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14"/>
+          </svg>
+             </div>
+
+          {isDropdownOpen && 
+          <>
+          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
+
+          <div className="absolute z-30 shadow-md top-20 right-24 flex flex-col bg-slate-50 p-1 text-blk rounded-md text-md">
+            <span
+            onClick={()=>signOut()}
+            className="hover:bg-slate-200/50 flex justify-between items-center w-full mb-1 px-8 py-2 rounded-md">
+            Logout
+            <svg className="w-5 h-5 ml-3 text-brown" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
+            </svg>
+            </span>
+            <span className="hover:bg-slate-200/50 w-full px-10 py-2 rounded-md">Lists</span>
+          </div>
+               </>
+          }
+        </div>
         <div
          className={`relative bg-brown p-2 z-30 rounded-full flex justify-center md:absolute md:top-8 md:right-9 items-center cursor-pointer rotating-element ${isRotated ? 'rotated' : ''}`}
-          onClick={handleToggleModal}
+         onClick={handleToggleModal}
         >
           <p className="sr-only">create list</p>
-          <svg className="w-7 md:w-6 h-6 text-blk" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-blk" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
           </svg>
+         </div>
         </div>
       </div>
+
+      
 
       {isModalOpen && (
         <>
           <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
 
         <motion.div
-        initial={{opacity:0.5, y:-50}}
+        initial={{opacity:0.8, y:-50}}
         
         animate={{opacity:1, y:0}}
         transition={{duration:1, ease:"easeOut"}}

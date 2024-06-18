@@ -10,6 +10,7 @@ import {
   PrivateRoutesContainer,
   Notfound,
   Lists,
+  ListPrev
 } from './components';
 import PrivateRoute from './context/PrivateRoute';
 import Spinner from './components/sub-components/Spinner';
@@ -29,6 +30,7 @@ function App() {
          <Route path="dashboard" element={<PrivateRoute element={<PrivateRoutesContainer/>}/>}>
            <Route path='' element={<Home/>}>
            <Route index element={<Lists/>}/>
+           <Route path='prev' element={<ListPrev/>}/>
            </Route>
          </Route>
          <Route path="*" element={<Notfound />}/>

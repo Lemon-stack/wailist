@@ -1,7 +1,10 @@
 import { useAuth } from "../../context/useAuth"
 import { Link } from "react-router-dom"
 export default function Sidenav() {
-    const {currentUser} = useAuth()
+    const {currentUser, logout} = useAuth()
+    function signOut(){
+      logout()
+    }
   return (
     <>
   {/* Navigation Toggle
@@ -68,6 +71,17 @@ export default function Sidenav() {
   <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/>
 </svg>
     Lists
+    </Link>
+    <Link
+      href="#"
+      onClick={()=> signOut()}
+      className="flex translate-y-96 items-center gap-3 mt-auto w-full border border-brown bg-brown text-slate-50 rounded-lg px-3 py-2 transition-all hover:text-brown hover:border-brown hover:bg-slate-50 group"
+    >
+<svg className="w-6 h-6 text-slate-50 group-hover:text-brown" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
+</svg>
+    
+    Signout
     </Link>
   </nav>
 </div>
