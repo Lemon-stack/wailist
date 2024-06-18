@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { useAuth } from "../context/useAuth"
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 export default function Signup() {
   const navigate = useNavigate()
 
@@ -36,7 +36,7 @@ export default function Signup() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-    {error && <div className="absolute top-0 right-0 bg-clRed text-white px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
+    {error && <div className="absolute top-0 right-0 bg-clRed text-white bg-red-600 px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
     <div className="relative p-4 w-full max-w-md h-full md:h-auto ">
       <div className="relative bg-white rounded-lg shadow -mx-8 md:mx-0">
         <div className="p-5">
@@ -57,8 +57,9 @@ export default function Signup() {
               Continue with GitHub
             </button> */}
             <button
+           
             onClick={SigninWithGoogle}
-             className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
+             className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-1 focus:ring-brown focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
@@ -110,12 +111,13 @@ export default function Signup() {
               ref={passwordRef}
             />
           
-            <button
+            <motion.button
+             whileTap={{scale:0.9}}
               type="submit"
-              className="inline-flex w-full items-center mt-4 justify-center rounded-lg bg-brown p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
+              className="inline-flex w-full items-center mt-4 justify-center rounded-lg bg-brown p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-brown focus:ring-offset-1 disabled:bg-gray-400"
             >
               Continue
-            </button>
+            </motion.button>
           </form>
           <div className="mt-6 text-center text-sm text-slate-600">
             Already have an account?

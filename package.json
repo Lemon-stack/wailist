@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@preline/collapse": "^2.3.0",
-    "@tailwindcss/line-clamp": "^0.4.4",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.10",
     "preline": "^2.3.0",
+    "prettier": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"

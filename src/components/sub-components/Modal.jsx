@@ -1,17 +1,3 @@
-
-
 export default function Modal() {
-    
-
-    return (
-        <>
-     
-
-      
-
-     
-
-        </>
-    )
-  }
-  
+    return <></>
+}

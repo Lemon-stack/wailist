@@ -30,9 +30,9 @@ function App() {
          <Route path="dashboard" element={<PrivateRoute element={<PrivateRoutesContainer/>}/>}>
            <Route path='' element={<Home/>}>
            <Route index element={<Lists/>}/>
-           <Route path='prev' element={<ListPrev/>}/>
            </Route>
          </Route>
+         <Route path='w/:userId/:productId' element={<ListPrev/>}/>
          <Route path="*" element={<Notfound />}/>
         </Route>
       </Routes> 

@@ -48,7 +48,7 @@ export default function Hero() {
   {/* <input type="text" className="py-3 px-4 block w-full border border-slate-50 text-slate-50 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-none bg-transparent" placeholder=""/> */}
      <motion.button
      whileTap={{scale:0.9}}
-     whileHover={{scale:1.1, backgroundColor:"#fff", color:"#da7e37"}}
+     whileHover={{scale:1, backgroundColor:"#fff", color:"#da7e37"}}
       onClick={checkUser}
       disabled={isPending}
       className="bg-brown text-blk px-6 py-2 text-lg font-medium rounded-md flex justify-center items-center hover:border-2 hover:border-brown group">

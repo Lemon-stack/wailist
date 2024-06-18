@@ -1,50 +1,48 @@
- import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import Topnav from "./sub-components/Topnav"
 import Sidenav from "./sub-components/Sidenav"
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 export default function Home() {
-  // const navigate = useNavigate()
-  
-  // const [error, setError] = useState('');
+    // const navigate = useNavigate()
 
-  // async function handleLogout(e){
-  //   e.preventDefault();
-  //   try{
-  //     const result = await logout()
-  //     console.log(result)
-  //     navigate('/login')
-  //   }catch(error) {
-  //     const errorMessage = error.message.match(/auth\/([^)]+)/);
-  //     setError(errorMessage ? errorMessage[1] : 'An error occurred');
-  //   }
-  // }
+    // const [error, setError] = useState('');
 
-  return (
-    <>
-    {/* {error && <div className="absolute top-0 right-0 bg-red-400 text-white px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
+    // async function handleLogout(e){
+    //   e.preventDefault();
+    //   try{
+    //     const result = await logout()
+    //     console.log(result)
+    //     navigate('/login')
+    //   }catch(error) {
+    //     const errorMessage = error.message.match(/auth\/([^)]+)/);
+    //     setError(errorMessage ? errorMessage[1] : 'An error occurred');
+    //   }
+    // }
+
+    return (
+        <>
+            {/* {error && <div className="absolute top-0 right-0 bg-red-400 text-white px-8 lg:px-10 py-1 flex justify-center items-center">{error}</div>}
     <div>Home</div>
     <button
     onClick={handleLogout}
     className="bg-black text-white rounded-md px-8 py-2">Logout</button> */}
-  <div className="h-full flex flex-col">
+            <div className="h-full flex flex-col">
+                <div className="w-full flex justify-end">
+                    <div className="md:w-[70%] w-full">
+                        <Topnav />
+                    </div>
+                </div>
 
-  <div className="w-full flex justify-end">
-  <div className="md:w-[70%] w-full">
-  <Topnav/>
-  </div>
-  </div>
-
-  <div className="flex">
-  <div className="md:w-[30%] hidden md:block">
-        <Sidenav />
-      </div>
-      <div className="w-full md:w-[70%]">
-        <Outlet />
-      </div>
-  </div>
-  </div>
-    </>
-
-  )
+                <div className="flex">
+                    <div className="md:w-[30%] hidden md:block">
+                        <Sidenav />
+                    </div>
+                    <div className="w-full md:w-[70%]">
+                        <Outlet />
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
