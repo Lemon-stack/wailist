@@ -2,39 +2,12 @@ import { Link } from "react-router-dom"
 import { useAuth } from "../../context/useAuth"
 
 export default function Sidenav() {
-  
   const { currentUser, logout } = useAuth()
   function signOut() {
     logout()
   }
   return (
     <>
-      {/* Navigation Toggle
-  <div className="flex justify-end p-2">
-    <button
-      type="button"
-      className="p-2 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-      data-hs-overlay="#sidebar-mini"
-      aria-controls="sidebar-mini"
-      aria-label="Toggle navigation"
-    >
-      <span className="sr-only">Toggle Navigation</span>
-      <svg
-        className="flex-shrink-0 size-4"
-        width={16}
-        height={16}
-        fill="currentColor"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fillRule="evenodd"
-          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-        />
-      </svg>
-    </button>
-  </div> */}
-      {/* End Navigation Toggle */}
-      {/* Sidebar */}
       <div
         id="sidebar-mini"
         className="p-6 rounded-e-lg transition-all bg-slate-100 duration-300 transform hidden md:block fixed top-0 start-0 bottom-0 z-10 md:w-[30%] lg:w-[30%] border-e border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-brown"
@@ -57,10 +30,10 @@ export default function Sidenav() {
           </div>
 
           <div className="w-full">
-            <nav className="flex flex-col text-sm font-medium som-2 pt-6 group-hover:text-brown">
+            <nav className="flex flex-col text-sm font-medium pt-6 group-hover:text-brown">
               <Link
                 href="#"
-                className="flex items-center gap-3 border border-brown w-full text-brown rounded-lg px-3 py-2 transition-all hover:text-slate-50 hover:border-brown hover:bg-brown group"
+                className="flex items-center mb-2 gap-3 border border-brown w-full text-brown rounded-lg px-3 py-2 transition-all hover:text-slate-50 hover:border-brown hover:bg-brown group"
               >
                 <svg
                   className="w-6 h-6 text-brown group-hover:text-slate-50"
