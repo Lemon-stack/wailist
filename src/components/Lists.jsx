@@ -1,4 +1,10 @@
-import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore"
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { db } from "../client/client"
@@ -13,6 +19,7 @@ export default function Lists() {
   const [editableProduct, setEditableProduct] = useState(null)
   const [editedName, setEditedName] = useState("")
   const [editedDescription, setEditedDescription] = useState("")
+  const [del, setDel] = useState(false)
 
   useEffect(() => {
     if (currentUser) {
@@ -76,25 +83,30 @@ export default function Lists() {
   }
 
   const handleDeleteProduct = async (productId) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        const productRef = doc(db, "users", currentUser.uid, "products", productId);
-        await deleteDoc(productRef);
-        const updatedProducts = products.filter((product) => product.id !== productId);
-        setProducts(updatedProducts);
-      } catch (error) {
-        console.error("Error deleting product: ", error);
-      }
+    try {
+      const productRef = doc(
+        db,
+        "users",
+        currentUser.uid,
+        "products",
+        productId
+      )
+      await deleteDoc(productRef)
+      const updatedProducts = products.filter(
+        (product) => product.id !== productId
+      )
+      setProducts(updatedProducts)
+    } catch (error) {
+      console.error("Error deleting product: ", error)
     }
-  };
-  
+  }
 
   if (loading) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className="py-6 px-10">
+    <div className="py-6 md:px-10">
       <h1 className="text-brown text-start text-2xl font-semibold mb-6 mt-2 md:mt-0">
         Your lists
       </h1>
@@ -139,7 +151,7 @@ export default function Lists() {
                 <div className="absolute flex justify-center items-center top-3 right-4">
                   {/* trash icon */}
                   <svg
-                  onClick={()=> handleDeleteProduct(product.id)}
+                    onClick={() => setDel(true)}
                     className="w-5 h-5 mr-2 text-brown hover:-rotate-12"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -175,17 +187,45 @@ export default function Lists() {
                   </svg>
                 </div>
               </div>
+              {del && (
+                <>
+                  <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
+
+                  <div className="absolute w-full px-[20%] z-30">
+                    <div className="flex flex-col bg-slate-50 p-5 shadow-md rounded-md">
+                      <p className="text-xl text-brown font-semibold">
+                        Confirm delete
+                      </p>
+                      <div className="flex justify-center items-center mt-6">
+                        <button
+                          className="bg-brown px-3 py-1 rounded text-slate-50 mr-2"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          Continue
+                        </button>
+                        <button
+                          onClick={() => setDel(false)}
+                          className="bg-slate-600 text-slate-50 rounded px-3 py-1"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </li>
           ))}
         </ul>
       ) : (
         <p className="text-slate-50">No List found.</p>
       )}
+
       {isEditing && (
-        <div className="fixed inset-0 backdrop-blur-[2px] flex justify-center z-30 items-center">
-          <div className="bg-white relative p-6 rounded-lg w-[70%] md:w-[45%]">
+        <div className="absolute inset-0 backdrop-blur-[2px] flex justify-center z-30 items-center">
+          <div className="bg-white relative p-6 rounded-lg w-[90%] md:w-[45%]">
             <svg
-            onClick={()=> setIsEditing(false)}
+              onClick={() => setIsEditing(false)}
               className="w-6 h-6 text-brown absolute right-5 top-4 cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"

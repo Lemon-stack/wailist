@@ -110,23 +110,23 @@ export default function Topnav() {
       <div className="group flex justify-between">
         <div className="flex items-center md:hidden">
           <img
-            className="inline-block flex-shrink-0 size-10 rounded-full"
+            className="inline-block flex-shrink-0 size-8 -ml-3 md:size-10 rounded-full"
             src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
             alt="User Avatar"
           />
-          <div className="ms-3 flex flex-col">
-            <h3 className="font-semibold text-brown text-start">
+          <div className="ms-1 md:ms-3 flex flex-col">
+            <h3 className="font-semibold text-sm md:text-md text-brown text-start">
               {currentUser.displayName}
             </h3>
-            <p className="text-sm font-medium text-slate-400 text-start">
+            <p className=" text-[10px] md:text-sm font-medium text-slate-400 text-start">
               {currentUser.email}
             </p>
           </div>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center -mr-4">
           <div className="mr-4 md:hidden">
-            <div className="absolute right-[5.4rem] top-9 z-30 ">
+            <div className="absolute right-[3.8rem] top-9 z-30 ">
               <svg
                 onClick={() => {
                     setIsDropdownOpen((prev) => !prev)
@@ -154,7 +154,7 @@ export default function Topnav() {
               <>
                 <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
 
-                <div className="absolute z-30 shadow-md top-20 right-24 flex flex-col bg-slate-50 p-1 text-blk rounded-md text-md">
+                <div className="absolute z-30 shadow-md top-20 right-16 flex flex-col bg-slate-50 p-1 text-blk rounded-md text-md cursor-context-menu">
                   <span
                     onClick={() => signOut()}
                     className="hover:bg-slate-200/50 flex justify-between items-center w-full mb-1 px-8 py-2 rounded-md"
@@ -214,13 +214,14 @@ export default function Topnav() {
       {isModalOpen && (
         <>
           <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
+          <div className="absolute z-30 w-full left-0 px-3 md:px-[16%] top-24 md:top-16">
 
           <motion.div
             initial={{ opacity: 0.8, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="absolute right-[17%] w-[65%] md:w-[45%] text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg"
-          >
+            className="w-full text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg"
+            >
             <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">
               New List
             </h2>
@@ -262,11 +263,12 @@ export default function Topnav() {
               <button
                 type="submit"
                 className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark"
-              >
+                >
                 Create List
               </button>
             </form>
           </motion.div>
+      </div>
         </>
       )}
     </div>
