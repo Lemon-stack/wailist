@@ -120,7 +120,7 @@ export default function Lists() {
               <div className="absolute -top-3 bg-slate-50 rounded-full p-1.5 flex justify-center items-center shadow-lg -left-3">
                 <svg
                   onClick={() => handleEditClick(product)}
-                  className="w-6 h-6 md:w-7 md:h-7 text-brown cursor-pointer"
+                  className="w-6 h-6 text-brown cursor-pointer"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -189,14 +189,13 @@ export default function Lists() {
               </div>
               {del && (
                 <>
-                  <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
-
-                  <div className="absolute w-full px-[20%] z-30">
+                  <p className="w-full h-full fixed top-0 left-0 bg-gray-90 backdrop-blur-[1.7px] bg-opacity-10 z-30"></p>
+                  <div className="absolute inset-0 w-full px-[10%] md:px-[20%] z-30">
                     <div className="flex flex-col bg-slate-50 p-5 shadow-md rounded-md">
                       <p className="text-xl text-brown font-semibold">
-                        Confirm delete
+                        Confirm delete?
                       </p>
-                      <div className="flex justify-center items-center mt-6">
+                      <div className="flex justify-center items-center mt-5 md:mt-6">
                         <button
                           className="bg-brown px-3 py-1 rounded text-slate-50 mr-2"
                           onClick={() => handleDeleteProduct(product.id)}
