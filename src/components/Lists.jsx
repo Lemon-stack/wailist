@@ -138,7 +138,7 @@ export default function Lists() {
   }
 
   return (
-    <div className="py-6 md:px-10">
+    <div className="py-6 -px-1 md:px-24">
       {error && (
         <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
           {error}
@@ -243,7 +243,7 @@ export default function Lists() {
                   </svg>
                 </div>
               </div>
-                <div className="flex -space-x-2 absolute right-0 bottom-0 pb-5 pr-5 justify-end">
+                <div className="flex -space-x-2 absolute right-0 bottom-0 pb-3 pr-3 md:pb-5 md:pr-5 justify-end">
                   
                     <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
                       <svg
