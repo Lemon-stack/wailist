@@ -5,11 +5,11 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { db } from "../client/client"
 import { useAuth } from "../context/useAuth"
-
+import Spinner from "./sub-components/Spinner"
 export default function Lists() {
   const navigate = useNavigate()
   const { currentUser } = useAuth()
@@ -20,17 +20,19 @@ export default function Lists() {
   const [editedName, setEditedName] = useState("")
   const [editedDescription, setEditedDescription] = useState("")
   const [del, setDel] = useState(false)
+  const [error, setError] = useState("")
+  const [isCopied, setIsCopied] = useState()
+  const productsRef = useMemo(() => {
+    if (currentUser) {
+      return collection(db, "users", currentUser.uid, "products")
+    }
+    return null
+  }, [currentUser])
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && productsRef) {
       const fetchProducts = async () => {
         try {
-          const productsRef = collection(
-            db,
-            "users",
-            currentUser.uid,
-            "products"
-          )
           const productsSnapshot = await getDocs(productsRef)
           const productsList = productsSnapshot.docs.map((doc) => ({
             id: doc.id,
@@ -39,6 +41,9 @@ export default function Lists() {
           setProducts(productsList)
           setLoading(false)
         } catch (error) {
+          setTimeout(() => {
+            setError("Error fetching products")
+          }, 1000)
           console.error("Error fetching products: ", error)
           setLoading(false)
         }
@@ -46,7 +51,7 @@ export default function Lists() {
 
       fetchProducts()
     }
-  }, [currentUser])
+  }, [currentUser, productsRef])
 
   const handleEditClick = (product) => {
     setIsEditing(true)
@@ -78,6 +83,9 @@ export default function Lists() {
       setIsEditing(false)
       setEditableProduct(null)
     } catch (error) {
+      setTimeout(() => {
+        setError("Error updating product")
+      }, 1000)
       console.error("Error updating product: ", error)
     }
   }
@@ -97,16 +105,37 @@ export default function Lists() {
       )
       setProducts(updatedProducts)
     } catch (error) {
+      setTimeout(() => {
+        setError("Error deleting product")
+      }, 1000)
+      setDel(false)
       console.error("Error deleting product: ", error)
     }
   }
 
+  const handleCopy = () => {
+    // Your copy to clipboard logic here
+    setIsCopied(true)
+    setTimeout(() => {
+      setIsCopied(false)
+    }, 1000)
+  }
   if (loading) {
-    return <div>Loading...</div>
+    return <Spinner />
   }
 
   return (
     <div className="py-6 md:px-10">
+      {error && (
+        <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+          {error}
+        </div>
+      )}
+      {isCopied && (
+        <div className="absolute top-0 right-0 bg-green-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+          Copied to clipboard
+        </div>
+      )}
       <h1 className="text-brown text-start text-2xl font-semibold mb-6 mt-2 md:mt-0">
         Your lists
       </h1>
@@ -152,7 +181,7 @@ export default function Lists() {
                   {/* trash icon */}
                   <svg
                     onClick={() => setDel(true)}
-                    className="w-5 h-5 mr-2 text-brown hover:-rotate-12"
+                    className="w-5 h-5 mr-3 text-brown hover:-rotate-12"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -168,8 +197,21 @@ export default function Lists() {
                       d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
                     />
                   </svg>
+
                   {/* share icon */}
                   <svg
+                    onClick={() => {
+                      const link = `http://wailist.vercel.app/w/${currentUser.uid}/${product.id}`
+                      navigator.clipboard.writeText(link).then(
+                        () => {
+                          handleCopy()
+                        },
+                        (err) => {
+                          setError("Error copying link")
+                          console.log(err)
+                        }
+                      )
+                    }}
                     className="w-5 h-5 text-brown hover:-rotate-12"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -181,8 +223,9 @@ export default function Lists() {
                     <path
                       stroke="currentColor"
                       strokeLinecap="round"
+                      strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
+                      d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"
                     />
                   </svg>
                 </div>

@@ -24,22 +24,6 @@ export default function Topnav() {
       setError("User is not authenticated.")
       setLoading(false)
     }
-
-    // const handleClickOutside = (event) => {
-    //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //       setIsModalOpen(false);
-    //     }
-    //     if (dropRef.current && !dropRef.current.contains(event.target)) {
-    //       setIsDropdownOpen(false);
-    //     }
-    //   };
-
-    //   document.addEventListener('mousedown', handleClickOutside);
-
-    //   return () => {
-    //     document.removeEventListener('mousedown', handleClickOutside);
-    //   };
-    
   }, [currentUser])
 
   const addProduct = useCallback(
@@ -50,13 +34,7 @@ export default function Topnav() {
         }
 
         const userRef = doc(db, "users", uid)
-        await setDoc(
-          userRef,
-          {
-            /* any initial data if needed */
-          },
-          { merge: true }
-        )
+        await setDoc(userRef, {}, { merge: true })
 
         const productsRef = collection(userRef, "products")
         const newProductRef = doc(productsRef) // This creates a new auto-generated document ID
@@ -126,12 +104,12 @@ export default function Topnav() {
 
         <div className="flex justify-between items-center -mr-4">
           <div className="mr-4 md:hidden">
-            <div className="absolute right-[3.8rem] top-9 z-30 ">
+            <div className="absolute right-[3.8rem] top-[2.1rem] z-30 ">
               <svg
                 onClick={() => {
-                    setIsDropdownOpen((prev) => !prev)
-                    setIsModalOpen(false)
-                    setIsRotated(false)
+                  setIsDropdownOpen((prev) => !prev)
+                  setIsModalOpen(false)
+                  setIsRotated(false)
                 }}
                 className="w-9 h-9 text-brown"
                 aria-hidden="true"
@@ -157,7 +135,7 @@ export default function Topnav() {
                 <div className="absolute z-30 shadow-md top-20 right-16 flex flex-col bg-slate-50 p-1 text-blk rounded-md text-md cursor-context-menu">
                   <span
                     onClick={() => signOut()}
-                    className="hover:bg-slate-200/50 flex justify-between items-center w-full mb-1 px-8 py-2 rounded-md"
+                    className="hover:bg-slate-200/50 text-brown flex justify-between items-center w-full mb-1 px-8 py-2 rounded-md"
                   >
                     Logout
                     <svg
@@ -173,13 +151,10 @@ export default function Topnav() {
                         stroke="currentColor"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth="2"
+                        strokeWidth="1.5"
                         d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
                       />
                     </svg>
-                  </span>
-                  <span className="hover:bg-slate-200/50 w-full px-10 py-2 rounded-md">
-                    Lists
                   </span>
                 </div>
               </>
@@ -214,61 +189,60 @@ export default function Topnav() {
       {isModalOpen && (
         <>
           <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
-          <div className="absolute z-30 w-full left-0 px-3 md:px-[16%] top-24 md:top-16">
-
-          <motion.div
-            initial={{ opacity: 0.8, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="w-full text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg"
+          <div className="absolute z-30 w-full left-0 px-3 md:px-[30%] top-24 md:top-16">
+            <motion.div
+              initial={{ opacity: 0.8, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="w-full text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg"
             >
-            <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">
-              New List
-            </h2>
+              <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">
+                New List
+              </h2>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label
-                  htmlFor="productName"
-                  className="block text-md font-medium mb-2 text-start"
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label
+                    htmlFor="productName"
+                    className="block text-md font-medium mb-2 text-start"
+                  >
+                    Product Name:
+                  </label>
+                  <input
+                    type="text"
+                    id="productName"
+                    className="block w-full rounded-lg border border-gray-300 px-3 py-1 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="productDescription"
+                    className="block text-md font-medium mb-2 text-start"
+                  >
+                    Description:
+                  </label>
+                  <textarea
+                    name="ProductDescription"
+                    rows={6}
+                    id="productDescription"
+                    className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark"
                 >
-                  Product Name:
-                </label>
-                <input
-                  type="text"
-                  id="productName"
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-1 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="productDescription"
-                  className="block text-md font-medium mb-2 text-start"
-                >
-                  Description:
-                </label>
-                <textarea
-                  name="ProductDescription"
-                  rows={6}
-                  id="productDescription"
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark"
-                >
-                Create List
-              </button>
-            </form>
-          </motion.div>
-      </div>
+                  Create List
+                </button>
+              </form>
+            </motion.div>
+          </div>
         </>
       )}
     </div>

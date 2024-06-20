@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useParams } from "react-router-dom"
-import { doc, getDoc } from "firebase/firestore"
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore"
 import { db } from "../../client/client"
 import { motion } from "framer-motion"
-
+import Spinner from "./Spinner"
 export default function ListPrev() {
   const { userId, productId } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
+  const emailRef = useRef()
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,8 +29,35 @@ export default function ListPrev() {
     fetchProduct()
   }, [userId, productId])
 
+  const addToWaitlist = async (email) => {
+    const productRef = doc(db, `users/${userId}/products`, productId)
+    const docSnap = await getDoc(productRef)
+    if (docSnap.exists()) {
+      const productData = docSnap.data()
+      const existingEmails = productData.waitlist?.emails || []
+
+      if (existingEmails.includes(email)) {
+        setError("This email is already in the waitlist.")
+      } else {
+        try {
+          await updateDoc(productRef, {
+            "waitlist.emails": arrayUnion(email),
+          })
+          console.log("Email added to waitlist")
+          setError(null)
+        } catch (error) {
+          console.error("Error adding email to waitlist: ", error)
+          setError("Error adding email to waitlist")
+        }
+      }
+    } else {
+      console.log("No such document!")
+      setError("No such product found.")
+    }
+  }
+
   if (loading) {
-    return <div>Loading...</div>
+    return <Spinner/>
   }
 
   return (
@@ -51,13 +80,30 @@ export default function ListPrev() {
               {product.description}
             </p>
           </div>
-          <form className="mb-8 flex justify-center">
+          {error && (
+            <p className="bg-red-500 text-slate-50 rounded-md my-2 mx-auto px-4 py-0.5 text-center">
+              {error}
+            </p>
+          )}
+          <form
+            className="mb-8 flex justify-center"
+            onSubmit={(e) => {
+              e.preventDefault()
+              const email = emailRef.current.value
+              addToWaitlist(email)
+            }}
+          >
             <input
-            placeholder="user@gmail.com"
+              ref={emailRef}
+              placeholder="user@gmail.com"
               className="w-[58%] rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
-              type="text"
+              type="email"
+              required
             />
-            <button className="bg-brown text-slate-50 text-lg ml-1 px-3 py-1 border-brown border-2 rounded-md">
+            <button
+              type="submit"
+              className="bg-brown text-slate-50 text-lg ml-1 px-3 py-1 border-brown border-2 rounded-md"
+            >
               Join waitlist
             </button>
           </form>
