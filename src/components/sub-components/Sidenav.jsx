@@ -132,7 +132,7 @@ export default function Sidenav() {
                 </div>
                 <div
                   onClick={() => signOut()}
-                  className="flex items-center justify-self-end gap-3 mt-auto w-full border border-brown bg-brown text-slate-50 rounded-lg px-3 py-2 transition-all hover:text-brown hover:border-brown hover:bg-slate-50 group"
+                  className="flex items-center justify-self-end gap-3 mt-auto mb-6 w-full border border-brown bg-brown text-slate-50 rounded-lg px-3 py-2 transition-all hover:text-brown hover:border-brown hover:bg-slate-50 group"
                 >
                   <svg
                     className="w-6 h-6 text-slate-50 group-hover:text-brown"

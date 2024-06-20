@@ -19,7 +19,8 @@ export default function Lists() {
   const [editableProduct, setEditableProduct] = useState(null)
   const [editedName, setEditedName] = useState("")
   const [editedDescription, setEditedDescription] = useState("")
-  const [del, setDel] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [productIdToDelete, setProductIdToDelete] = useState(null)
   const [error, setError] = useState("")
   const [isCopied, setIsCopied] = useState()
   const productsRef = useMemo(() => {
@@ -91,30 +92,42 @@ export default function Lists() {
   }
 
   const handleDeleteProduct = async (productId) => {
+    setProductIdToDelete(productId)
+    setShowConfirmation(true)
+  }
+
+  const confirmDeleteProduct = async () => {
     try {
       const productRef = doc(
         db,
         "users",
         currentUser.uid,
         "products",
-        productId
+        productIdToDelete
       )
       await deleteDoc(productRef)
       const updatedProducts = products.filter(
-        (product) => product.id !== productId
+        (product) => product.id !== productIdToDelete
       )
       setProducts(updatedProducts)
     } catch (error) {
       setTimeout(() => {
         setError("Error deleting product")
       }, 1000)
-      setDel(false)
+      setShowConfirmation(false)
       console.error("Error deleting product: ", error)
+    } finally {
+      // Reset confirmation modal state
+      setShowConfirmation(false)
+      setProductIdToDelete(null)
     }
   }
 
+  const cancelDelete = () => {
+    setShowConfirmation(false)
+    setProductIdToDelete(null)
+  }
   const handleCopy = () => {
-    // Your copy to clipboard logic here
     setIsCopied(true)
     setTimeout(() => {
       setIsCopied(false)
@@ -180,7 +193,7 @@ export default function Lists() {
                 <div className="absolute flex justify-center items-center top-3 right-4">
                   {/* trash icon */}
                   <svg
-                    onClick={() => setDel(true)}
+                    onClick={() => handleDeleteProduct(product.id)}
                     className="w-5 h-5 mr-3 text-brown hover:-rotate-12"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -230,32 +243,91 @@ export default function Lists() {
                   </svg>
                 </div>
               </div>
-              {del && (
-                <>
-                  <p className="w-full h-full fixed top-0 left-0 bg-gray-90 backdrop-blur-[1.7px] bg-opacity-10 z-30"></p>
-                  <div className="absolute inset-0 w-full px-[10%] md:px-[20%] z-30">
-                    <div className="flex flex-col bg-slate-50 p-5 shadow-md rounded-md">
-                      <p className="text-xl text-brown font-semibold">
-                        Confirm delete?
-                      </p>
-                      <div className="flex justify-center items-center mt-5 md:mt-6">
-                        <button
-                          className="bg-brown px-3 py-1 rounded text-slate-50 mr-2"
-                          onClick={() => handleDeleteProduct(product.id)}
-                        >
-                          Continue
-                        </button>
-                        <button
-                          onClick={() => setDel(false)}
-                          className="bg-slate-600 text-slate-50 rounded px-3 py-1"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+                <div className="flex -space-x-2 absolute right-0 bottom-0 pb-5 pr-5 justify-end">
+                  
+                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
+                      <svg
+                        className="size-full text-gray-300"
+                        width={16}
+                        height={16}
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.62854"
+                          y="0.359985"
+                          width={15}
+                          height={15}
+                          rx="7.5"
+                          fill="white"
+                        />
+                        <path
+                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
+                      <svg
+                        className="size-full text-gray-300"
+                        width={16}
+                        height={16}
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.62854"
+                          y="0.359985"
+                          width={15}
+                          height={15}
+                          rx="7.5"
+                          fill="white"
+                        />
+                        <path
+                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
+                      <svg
+                        className="size-full text-gray-300"
+                        width={16}
+                        height={16}
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.62854"
+                          y="0.359985"
+                          width={15}
+                          height={15}
+                          rx="7.5"
+                          fill="white"
+                        />
+                        <path
+                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                  
+                </div>
             </li>
           ))}
         </ul>
@@ -326,6 +398,33 @@ export default function Lists() {
             </form>
           </div>
         </div>
+      )}
+
+      {showConfirmation && (
+        <>
+          <p className="w-full h-full fixed top-0 left-0 bg-gray-90 backdrop-blur-[1.7px] bg-opacity-10 z-30"></p>
+          <div className="absolute top-[20%] inset-0 md:inset-52 w-full md:w-[70%] px-[10%] md:px-[20%] z-30">
+            <div className="flex flex-col bg-slate-50 p-5 shadow-md rounded-md">
+              <p className="text-xl text-brown font-semibold">
+                Confirm delete?
+              </p>
+              <div className="flex justify-center items-center mt-5 md:mt-6">
+                <button
+                  className="bg-brown px-3 py-1 rounded text-slate-50 mr-2"
+                  onClick={() => confirmDeleteProduct()}
+                >
+                  Continue
+                </button>
+                <button
+                  onClick={() => cancelDelete()}
+                  className="bg-slate-600 text-slate-50 rounded px-3 py-1"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )
