@@ -442,7 +442,7 @@ export default function Lists() {
                 </button>
                 <button
                   onClick={() => cancelDelete()}
-                  className="bg-slate-600 text-slate-50 rounded px-3 py-1"
+                  className="bg-blk/90 text-slate-50 rounded px-3 py-1"
                 >
                   Cancel
                 </button>

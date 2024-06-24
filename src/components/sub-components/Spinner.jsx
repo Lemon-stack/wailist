@@ -1,11 +1,11 @@
 export default function Spinner() {
   return (
     <div
-    className="px-auto translate-y-[20%] md:translate-y-[50%] h-full w-full flex justify-center" 
+    className="px-auto translate-y-[50%] h-full w-full flex justify-center m-0" 
     role="status">
   <svg
     aria-hidden="true"
-    className="w-10 h-10 lg:h-12 lg:w-12 text-blk animate-spin fill-brown"
+    className="w-10 h-10 lg:h-12 lg:w-12 text-blk/60 animate-spin fill-brown"
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,6 @@ export default function Spinner() {
       fill="currentFill"
     />
   </svg>
-  <span className="sr-only">Loading...</span>
 </div>
 
   )
