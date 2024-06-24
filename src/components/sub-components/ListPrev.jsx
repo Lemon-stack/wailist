@@ -61,22 +61,22 @@ export default function ListPrev() {
   }
 
   return (
-    <div className="py-6 px-6 rounded-md h-full w-full flex justify-center items-center">
+    <div className="py-6 px-8 md:px-14 rounded-md h-full w-full flex justify-center items-center">
       {product ? (
-        <div className="relative flex flex-col justify-between bg-slate-50 h-full w-full min-w-[23rem] min-h-64 md:min-h-72 md:max-w-[55%] rounded-md py-3 px-5 md:px-8">
+        <div className="relative flex flex-col justify-center w-full shadow-md min-w-[23rem] min-h-12 md:min-h-72 md:max-w-[55%] rounded-md py-3 px-4 md:px-8">
           <div>
             <motion.h1
               initial={{ rotateZ: 0 }}
               animate={{ rotateZ: 2 }}
               transition={{ ease: "easeOut", delay: 1.1 }}
-              className="md:text-xl absolute top-5 text-start font-semibold text-slate-50 rounded-md px-4 py-1 bg-blk"
+              className="md:text-md absolute top-5 text-start font-semibold text-slate-50 rounded-md px-4 py-1 bg-blk"
             >
               Join the waitlist
             </motion.h1>
-            <h2 className="text-4xl md:text-5xl mt-14 font-bold text-brown">
+            <h2 className="text-4xl md:text-4xl mt-14 font-bold text-brown">
               {product.name}
             </h2>
-            <p className="text-lg px-4 mt-1 md:mt-3 md:mb-4">
+            <p className="text-md px-4 mb-10 mt-1 md:mt-3 md:mb-4">
               {product.description}
             </p>
           </div>
@@ -102,9 +102,9 @@ export default function ListPrev() {
             />
             <button
               type="submit"
-              className="bg-brown text-slate-50 text-lg ml-1 px-3 py-1 border-brown border-2 rounded-md"
+              className="bg-brown text-slate-50 text-lg ml-1 px-6 py-1 border-brown border-2 rounded-md"
             >
-              Join waitlist
+              Join
             </button>
           </form>
         </div>

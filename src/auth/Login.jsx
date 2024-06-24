@@ -19,22 +19,29 @@ export default function Login() {
     } catch (error) {
       const errorMessage =
         error.message.match(/auth\/([^)]+)/)[1] ?? "An error occured"
-      setError(errorMessage)
+        setTimeout(() => {
+          setError(errorMessage)
+        }, 1000)
     }
   }
 
   async function SigninWithGoogle(e) {
     e.preventDefault()
     try {
-      const result = await googleSignin()
-      console.log(result)
+      await googleSignin()
       navigate("/dashboard")
     } catch (error) {
       const errorMessage =
         error.message.match(/auth\/([^)]+)/)[1] ?? "An eror occured"
-      setError(errorMessage)
+     
+        setTimeout(() => {
+          setError(errorMessage)
+        }, 1000)
+        
     }
   }
+
+  
   useEffect(() => {
     if (currentUser) {
       navigate("/dashboard")
@@ -42,20 +49,21 @@ export default function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
 
+  
   return (
     <div className="flex flex-col justify-center items-center">
       {error && (
-        <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+        <div className="absolute z-40 top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
           {error}
         </div>
       )}
       <div className="relative lg:p-4 w-full max-w-md h-full md:h-auto">
-        <div className="relative bg-white rounded-lg shadow -mx-4 md:mx-0">
+        <div className="relative mt-10 bg-white rounded-lg shadow -mx-4 md:mx-0">
           <div className="p-5">
             <p className="mb-4 text-sm font-normal text-gray-800" />
             <div className="text-center">
-              <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
-                Login to your account
+              <p className="mb-3 text-2xl font-semibold leading-5 text-blk">
+                Login to your account <span className="text-brown">.</span>
               </p>
             </div>
             <div className="mt-7 flex flex-col gap-2">
@@ -96,7 +104,7 @@ export default function Login() {
               onSubmit={handleSubmit}
               className="w-full flex flex-col items-start"
             >
-              <label htmlFor="email" className="font-semibold mb-2">
+              <label htmlFor="email" className="mb-2">
                 Email address
               </label>
               <input
@@ -109,7 +117,7 @@ export default function Login() {
                 defaultValue=""
                 ref={emailRef}
               />
-              <label htmlFor="password" className="mt-2 font-semibold">
+              <label htmlFor="password" className="mt-2">
                 Password
               </label>
               <input

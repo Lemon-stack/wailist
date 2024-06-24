@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react"
 import { doc, setDoc, collection } from "firebase/firestore"
 import { db } from "../../client/client"
 import Spinner from "./Spinner"
-import { motion } from "framer-motion"
+
 
 export default function Topnav() {
   const { currentUser, logout } = useAuth()
@@ -14,7 +14,6 @@ export default function Topnav() {
   const [error, setError] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [isRotated, setIsRotated] = useState(false)
 
   useEffect(() => {
     if (currentUser) {
@@ -84,8 +83,8 @@ export default function Topnav() {
   }
 
   return (
-    <div className="text-slate-50 w-full h-full">
-      <div className="group flex justify-between">
+    <div className="text-slate-50 absolute top-0 backdrop-blur-sm w-full">
+      <div className="group flex justify-between px-8 py-4">
         <div className="flex items-center md:hidden">
           <img
             className="inline-block flex-shrink-0 size-8 -ml-3 md:size-10 rounded-full"
@@ -104,29 +103,7 @@ export default function Topnav() {
 
         <div className="flex justify-between items-center -mr-4">
           <div className="mr-4 md:hidden">
-            <div className="absolute right-[3.8rem] top-[2.1rem] z-30 ">
-              <svg
-                onClick={() => {
-                  setIsDropdownOpen((prev) => !prev)
-                  setIsModalOpen(false)
-                  setIsRotated(false)
-                }}
-                className="w-9 h-9 text-brown"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  d="M5 7h14M5 12h14M5 17h14"
-                />
-              </svg>
-            </div>
+            
 
             {isDropdownOpen && (
               <>
@@ -186,65 +163,7 @@ export default function Topnav() {
         </div>
       </div>
 
-      {isModalOpen && (
-        <>
-          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
-          <div className="absolute z-30 w-full left-0 px-3 md:px-[30%] top-24 md:top-16">
-            <motion.div
-              initial={{ opacity: 0.8, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="w-full text-blk bg-slate-50 rounded-lg px-6 py-4 z-20 shadow-lg"
-            >
-              <h2 className="text-start font-bold text-brown text-2xl mb-3 underline">
-                New List
-              </h2>
-
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label
-                    htmlFor="productName"
-                    className="block text-md font-medium mb-2 text-start"
-                  >
-                    Product Name:
-                  </label>
-                  <input
-                    type="text"
-                    id="productName"
-                    className="block w-full rounded-lg border border-gray-300 px-3 py-1 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="productDescription"
-                    className="block text-md font-medium mb-2 text-start"
-                  >
-                    Description:
-                  </label>
-                  <textarea
-                    name="ProductDescription"
-                    rows={6}
-                    id="productDescription"
-                    className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder-text-gray-400 focus:ring-2 focus:ring-brown focus:ring-offset-1"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="bg-brown text-white py-2 px-4 rounded-lg shadow-md hover:bg-brown-dark"
-                >
-                  Create List
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        </>
-      )}
+     
     </div>
   )
 }

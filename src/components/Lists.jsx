@@ -5,14 +5,16 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { db } from "../client/client"
 import { useAuth } from "../context/useAuth"
 import Spinner from "./sub-components/Spinner"
+import Modal from "./sub-components/Modal"
+import Waitlist from "./sub-components/Waitlist"
 export default function Lists() {
   const navigate = useNavigate()
-  const { currentUser } = useAuth()
+  const { currentUser, logout } = useAuth()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
@@ -23,6 +25,10 @@ export default function Lists() {
   const [productIdToDelete, setProductIdToDelete] = useState(null)
   const [error, setError] = useState("")
   const [isCopied, setIsCopied] = useState()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isRotated, setIsRotated] = useState(false)
+
   const productsRef = useMemo(() => {
     if (currentUser) {
       return collection(db, "users", currentUser.uid, "products")
@@ -53,6 +59,13 @@ export default function Lists() {
       fetchProducts()
     }
   }, [currentUser, productsRef])
+
+  const handleToggleModal = useCallback(() => {
+    setIsRotated((prev) => !prev)
+    setIsModalOpen((prev) => !prev)
+    setIsDropdownOpen(false)
+  }, [])
+  // rotate the create boutton
 
   const handleEditClick = (product) => {
     setIsEditing(true)
@@ -133,68 +146,87 @@ export default function Lists() {
       setIsCopied(false)
     }, 1000)
   }
+
+  function signOut() {
+    logout()
+  }
   if (loading) {
     return <Spinner />
   }
 
   return (
-    <div className="py-6 -px-1 md:px-24">
-      {error && (
-        <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
-          {error}
+    <div className="py-6 px-6 md:pl-[10%]">
+      {/* nav */}
+      <div className="flex justify-between items-center w-full md:justify-end">
+        <h1 className="text-3xl text-blk text-start font-bold md:hidden">
+          Wailist <span className="text-brown">.</span>
+        </h1>
+
+        <div className="z-30 flex justify-center items-center">
+          <svg
+            onClick={() => {
+              setIsDropdownOpen((prev) => !prev)
+              setIsModalOpen(false)
+              setIsRotated(false)
+            }}
+            className="w-9 h-9 md:hidden text-blk mr-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeWidth="2"
+              d="M5 7h14M5 12h14M5 17h14"
+            />
+          </svg>
+
+          {/* create Icon */}
+          <div className="flex justify-center py-1 px-2 rounded-full bg-blk/5 items-center">
+            <p className="p-2 mr-2 rounded-full bg-blk">
+              <svg
+                onClick={() => handleToggleModal()}
+                className={`w-5 h-5 text-slate-50 rotating-element ${isRotated ? "rotated" : ""}`}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 12h14m-7 7V5"
+                />
+              </svg>
+            </p>
+            <span className="mr-2">Create</span>
+          </div>
         </div>
-      )}
-      {isCopied && (
-        <div className="absolute top-0 right-0 bg-green-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
-          Copied to clipboard
-        </div>
-      )}
-      <h1 className="text-brown text-start text-2xl font-semibold mb-6 mt-2 md:mt-0">
-        Your lists
-      </h1>
+      </div>
+
       {products.length > 0 ? (
-        <ul className="">
+        <ul className="mt-6 grid grid-cols-1 gap-4">
+          <h3 className="text-xl font-semibold text-start">Your List</h3>
           {products.map((product) => (
             <li
-              className="bg-slate-50 flex px-5 py-4 md:py-8 relative justify-center items-start flex-col rounded-lg w-full mb-5"
               key={product.id}
+              className="w-full relative rounded-md flex justify-between px-6 py-5 shadow-md"
             >
-              <div className="absolute -top-3 bg-slate-50 rounded-full p-1.5 flex justify-center items-center shadow-lg -left-3">
-                <svg
+              <div className="flex flex-col">
+                <p
                   onClick={() => handleEditClick(product)}
-                  className="w-6 h-6 text-brown cursor-pointer"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                  className="p-1 mb-1 w-10 border-b border-blk flex justify-start items-center"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-                  />
-                </svg>
-              </div>
-
-              <h2
-                onClick={() => navigate(`/w/${currentUser.uid}/${product.id}`)}
-                className="text-2xl font-semibold text-brown cursor-pointer hover:underline"
-              >
-                - {product.name}
-              </h2>
-              <div>
-                <p className="max-w-lg md:max-w-xl truncate overflow-hidden mt-2">
-                  {product.description}
-                </p>
-                <div className="absolute flex justify-center items-center top-3 right-4">
-                  {/* trash icon */}
                   <svg
-                    onClick={() => handleDeleteProduct(product.id)}
-                    className="w-5 h-5 mr-3 text-brown hover:-rotate-12"
+                    className="w-5 h-5 text-blk"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -206,13 +238,27 @@ export default function Lists() {
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                      strokeWidth="1.3"
+                      d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                     />
                   </svg>
+                </p>
 
-                  {/* share icon */}
-                  <svg
+                <h2
+                  onClick={() =>
+                    navigate(`/w/${currentUser.uid}/${product.id}`)
+                  }
+                  className="text-xl font-semibold hover:cursor-pointer hover:underline text-brown text-start"
+                >
+                  {product.name}
+                </h2>
+                <p className="text-start text-sm">{product.description}</p>
+              </div>
+              <div className="flex flex-col-reverse justify-between items-start mr-4 md:mr-0">
+                <Waitlist />
+                <div className="flex items-center justify-start">
+                  {/* link Icon */}
+                  <img
                     onClick={() => {
                       const link = `http://wailist.vercel.app/w/${currentUser.uid}/${product.id}`
                       navigator.clipboard.writeText(link).then(
@@ -225,114 +271,93 @@ export default function Lists() {
                         }
                       )
                     }}
-                    className="w-5 h-5 text-brown hover:-rotate-12"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"
-                    />
-                  </svg>
+                    className="hover:-rotate-12 ease-in mr-3"
+                    src="/link.svg"
+                    alt=""
+                  />
+                  <span className="h-6 border"></span>
+                  {/* delete Icon */}
+                  <img
+                    onClick={() => handleDeleteProduct(product.id)}
+                    className="ml-3 hover:-rotate-12 ease-in"
+                    src="/trash.svg"
+                    alt=""
+                  />
                 </div>
               </div>
-                <div className="flex -space-x-2 absolute right-0 bottom-0 pb-3 pr-3 md:pb-5 md:pr-5 justify-end">
-                  
-                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
-                      <svg
-                        className="size-full text-gray-300"
-                        width={16}
-                        height={16}
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="0.62854"
-                          y="0.359985"
-                          width={15}
-                          height={15}
-                          rx="7.5"
-                          fill="white"
-                        />
-                        <path
-                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </span>
-                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
-                      <svg
-                        className="size-full text-gray-300"
-                        width={16}
-                        height={16}
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="0.62854"
-                          y="0.359985"
-                          width={15}
-                          height={15}
-                          rx="7.5"
-                          fill="white"
-                        />
-                        <path
-                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </span>
-                    <span className="inline-block size-7 bg-gray-100 rounded-full overflow-hidden">
-                      <svg
-                        className="size-full text-gray-300"
-                        width={16}
-                        height={16}
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="0.62854"
-                          y="0.359985"
-                          width={15}
-                          height={15}
-                          rx="7.5"
-                          fill="white"
-                        />
-                        <path
-                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </span>
-                  
-                </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-slate-50">No List found.</p>
+        <p className="">No List found.</p>
+      )}
+
+      {/* USER ACTIONS */}
+
+      {error && (
+        <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+          {error}
+        </div>
+      )}
+      {isCopied && (
+        <div className="absolute z-40 top-0 right-0 bg-green-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+          Copied to clipboard
+        </div>
+      )}
+
+      {isModalOpen && <Modal />}
+
+      {/* dropdown */}
+
+      {isDropdownOpen && (
+        <>
+          <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>
+
+          <div className="absolute z-30 shadow-md top-20 right-16 flex flex-col bg-slate-50 p-1 text-blk rounded-md text-md cursor-context-menu">
+            <svg
+              onClick={() => setIsDropdownOpen(false)}
+              className="w-5 h-5 mr-1 my-1 text-blk ml-auto cursor-pointer"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+
+            <span
+              onClick={() => signOut()}
+              className="hover:bg-slate-200/50 text-blk flex justify-between items-center w-full mb-1 px-8 py-2 rounded-md"
+            >
+              Logout
+              <svg
+                className="w-5 h-5 ml-3 text-blk"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                  d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+                />
+              </svg>
+            </span>
+          </div>
+        </>
       )}
 
       {isEditing && (

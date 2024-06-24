@@ -18,7 +18,7 @@ export default function Hero() {
   }
   return (
     // streamline your product's launch waitlist
-    <motion.div className="w-full h-full flex flex-col m-0 justify-center pt-[20%] md:px-6 lg:pt-[12%]">
+    <motion.div className="w-full h-full flex flex-col bg-blk pl-[8%] m-0 justify-center pt-[20%] md:px-6 lg:pt-[12%]">
       <div className="flex flex-col items-start justify-center text-slate-50">
         <motion.h1
         initial={{opacity:0, y:-50}}
