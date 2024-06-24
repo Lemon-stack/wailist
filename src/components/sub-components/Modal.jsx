@@ -4,13 +4,14 @@ import { useAuth } from "../../context/useAuth"
 import { doc, setDoc, collection } from "firebase/firestore"
 import Spinner from "./Spinner"
 import { db } from "../../client/client"
-export default function Modal() {
+export default function Modal({ onFormSubmit }) {
   const [name, setName] = useState()
   const [description, setDescription] = useState()
   const { currentUser } = useAuth()
   const [uid, setUid] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState("")
 
   useEffect(() => {
     if (currentUser) {
@@ -41,9 +42,13 @@ export default function Modal() {
           waitlist: { emails: [] }, // Initialize waitlist with empty array
         })
 
-        console.log("Product added successfully!")
+        setTimeout(() => {
+          setSuccess("Product added successfully!")
+        }, 1000)
       } catch (error) {
-        console.error("Error adding product: ", error)
+        setTimeout(() => {
+          setError("Error adding product")
+        }, 1000)
       }
     },
     [uid]
@@ -54,8 +59,9 @@ export default function Modal() {
       await addProduct(name, description)
       setName("")
       setDescription("")
+      onFormSubmit()
     },
-    [addProduct, name, description]
+    [addProduct, name, description, onFormSubmit]
   )
 
   if (loading) {
@@ -66,6 +72,11 @@ export default function Modal() {
       {error && (
         <div className="absolute top-0 right-0 bg-red-600 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
           {error}
+        </div>
+      )}
+      {success && (
+        <div className="absolute top-0 right-0 bg-green-600 z-40 text-white px-8 lg:px-10 py-1 flex justify-center items-center">
+          {success}
         </div>
       )}
       <p className="w-full h-full absolute top-0 left-0 bg-gray-90 backdrop-blur-[1.5px] bg-opacity-10 z-20"></p>

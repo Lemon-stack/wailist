@@ -5,13 +5,14 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { lazy, useCallback, useEffect, useMemo, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { db } from "../client/client"
 import { useAuth } from "../context/useAuth"
-import Spinner from "./sub-components/Spinner"
-import Modal from "./sub-components/Modal"
-import Waitlist from "./sub-components/Waitlist"
+const Spinner = lazy(()=>import("./sub-components/Spinner"))
+const Modal = lazy(()=>import("./sub-components/Modal"))
+const Waitlist = lazy(()=>import("./sub-components/Waitlist"))
+const SmWelcome = lazy(()=> import('./sub-components/SmWelcome'))
 export default function Lists() {
   const navigate = useNavigate()
   const { currentUser, logout } = useAuth()
@@ -36,6 +37,7 @@ export default function Lists() {
     return null
   }, [currentUser])
 
+ 
   useEffect(() => {
     if (currentUser && productsRef) {
       const fetchProducts = async () => {
@@ -146,7 +148,9 @@ export default function Lists() {
       setIsCopied(false)
     }, 1000)
   }
-
+  const handleFormSubmit = () => {
+    setIsModalOpen(false)
+  }
   function signOut() {
     logout()
   }
@@ -212,9 +216,18 @@ export default function Lists() {
         </div>
       </div>
 
+      {/* smal screen welcome text */}
+     <div className="md:hidden">
+  <SmWelcome user={currentUser}/>
+     </div>
+
+     
       {products.length > 0 ? (
-        <ul className="mt-6 grid grid-cols-1 gap-4">
+        <ul className="mt-4 grid grid-cols-1 gap-4">
+          <div className="flex justify-between items-center">
           <h3 className="text-xl font-semibold text-start">Your List</h3>
+          <p className="mr-3 rounded-full md:text-sm bg-blk text-slate-50 flex items-center px-[0.7rem] md:px-2.5 py-1">{products.length}</p>
+          </div>
           {products.map((product) => (
             <li
               key={product.id}
@@ -252,11 +265,15 @@ export default function Lists() {
                 >
                   {product.name}
                 </h2>
-                <p className="text-start text-sm">{product.description}</p>
+                <p className="max-w-[10.4rem] overflow-hidden whitespace-nowrap overflow-ellipsis text-start text-sm">{product.description}</p>
               </div>
-              <div className="flex flex-col-reverse justify-between items-start mr-4 md:mr-0">
+              <div className="flex flex-col-reverse justify-between items-end md:mr-0">
+              
+                <Link className="flex items-center justify-between p-1.5 rounded-full bg-blk/5" to={`product/${currentUser.uid}/${product.id}`}>
                 <Waitlist />
-                <div className="flex items-center justify-start">
+                <p className="ml-1 text-brown font-semibold">{product.waitlist?.emails?.length || ""}</p>
+                </Link>
+                <div className="flex items-center justify-end">
                   {/* link Icon */}
                   <img
                     onClick={() => {
@@ -284,12 +301,16 @@ export default function Lists() {
                     alt=""
                   />
                 </div>
+                
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="">No List found.</p>
+        <p className="flex items-center justify-center mt-12 text-center shadow-sm p-2 rounded-lg"><svg className="w-5 h-5 mr-1 text-brown" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+      </svg>
+      No List found.</p>
       )}
 
       {/* USER ACTIONS */}
@@ -305,7 +326,7 @@ export default function Lists() {
         </div>
       )}
 
-      {isModalOpen && <Modal />}
+      {isModalOpen && <Modal onFormSubmit={handleFormSubmit}/>}
 
       {/* dropdown */}
 

@@ -1,21 +1,17 @@
 export default function Notfound() {
   return (
-    <section className="flex items-center h-full p-16">
-      <div className="container flex flex-col items-center ">
-        <div className="flex flex-col gap-6 max-w-md text-center">
-          <h2 className="font-extrabold text-9xl text-gray-600 dark:text-gray-100">
-            <span className="sr-only">Error</span>404
-          </h2>
-          <p className="text-2xl md:text-3xl text-slate-100">
+    <section className="flex items-center justify-center h-full p-16">
+      <div className="flex flex-col">
+        <img className="w-full" src="/Error.svg" alt="" />
+        <p className="text-xl md:text-2xl text-blk mb-4">
             Sorry, we couldn&apos;t find this page.
           </p>
           <a
             href="/"
-            className="px-8 py-4 text-xl font-semibold rounded bg-brown text-blk hover:text-blk rotate-2"
+            className="px-8 py-4 text-xl font-semibold rounded bg-brown text-slate-50 hover:bg-blk rotate-2"
           >
             Back to home
           </a>
-        </div>
       </div>
     </section>
   )

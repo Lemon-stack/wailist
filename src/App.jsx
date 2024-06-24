@@ -1,11 +1,12 @@
 import "./App.css"
-import { Suspense } from "react"
+import { Suspense, lazy } from "react"
 import AuthProvider from "./context/Authcontext"
 import { Routes, Route, Outlet } from "react-router-dom"
 import { Signup, Login, PasswordReset } from "./auth/index"
 import { Home, Container, Hero, Notfound, Lists, ListPrev } from "./components"
 import PrivateRoute from "./context/PrivateRoute"
 import Spinner from "./components/sub-components/Spinner"
+const EmailsJoined = lazy(()=> import('./components/sub-components/EmailsJoined'))
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               >
                 <Route path="" element={<Home />}>
                   <Route index element={<Lists />} />
+                  <Route path="product/:userId/:productId" element={<EmailsJoined/>} />
                 </Route>
               </Route>
               <Route path="w/:userId/:productId" element={<ListPrev />} />

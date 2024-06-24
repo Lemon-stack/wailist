@@ -110,23 +110,8 @@ export default function ListPrev() {
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center md:mt-14">
-          <svg
-            className="w-14 md:w-32 h-14 md:h-32 text-blk"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="2"
-              d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-            />
-          </svg>
-          <h3 className="text-3xl text-brown font-bold">Ooops!!!</h3>
+          <img className="w-full" src="/no-data.svg" alt="" />
+          <h3 className="text-3xl text-brown font-bold">Ooops!</h3>
           <p className="text-blk text-lg">Product not found</p>
         </div>
       )}

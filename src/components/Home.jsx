@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Sidenav from "./sub-components/Sidenav"
+import Footer from "./Footer"
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
     className="bg-black text-white rounded-md px-8 py-2">Logout</button> */}
     
 
+        <div className="flex flex-col">
         <div className="flex">
           <div className="md:w-[20%] h-full hidden md:block">
             <Sidenav />
@@ -36,7 +38,11 @@ export default function Home() {
             <Outlet />
           </div>
         </div>
+          <div className="mt-auto absolute bottom-2 bg-slate-50/5 backdrop-blur-sm right-2">
+            <Footer/>
     
+          </div>
+          </div>
     </>
   )
 }
