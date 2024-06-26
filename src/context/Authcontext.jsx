@@ -1,14 +1,16 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, Suspense } from "react"
 import Spinner from "../components/sub-components/Spinner"
-import { auth, provider } from "../client/client"
+import { auth } from "../client/client"
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  signInWithRedirect,
+  // signInWithRedirect,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth"
 
 export const AuthContext = React.createContext()
@@ -29,7 +31,8 @@ export default function AuthProvider({ children }) {
     return signOut(auth)
   }
   function googleSignin() {
-    return signInWithRedirect(auth, provider)
+    // return signInWithRedirect(auth, provider)
+    return signInWithPopup(auth, new GoogleAuthProvider());
   }
   const sendPasswordReset = async (email) => {
     return sendPasswordResetEmail(auth, email)
